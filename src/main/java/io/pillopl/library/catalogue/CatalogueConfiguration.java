@@ -10,11 +10,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @Slf4j
 @EnableAutoConfiguration
-@Import({CatalogueDatabaseConfig.class, DomainEventsConfig.class})
+@Import({CatalogueDatabaseConfig.class, DomainEventsConfig.class, CatalogueController.class })
+@PropertySource("classpath:catalogue.properties")
 public class CatalogueConfiguration {
 
     @Bean

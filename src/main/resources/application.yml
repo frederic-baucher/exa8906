@@ -1,8 +1,8 @@
 spring:
   h2:
     console.enabled: true
-# management:
-  # endpoints:
-    # web:
-      # exposure:
-        # include: info, health, metrics, prometheus
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, beans, mappings, httpexchanges, configprops, env, loggers # metrics, prometheus (cf https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#actuator)

@@ -16,7 +16,7 @@ public class LibraryApplication {
         new SpringApplicationBuilder()
                 .parent(LibraryApplication.class)
                 .child(LendingConfig.class).web(WebApplicationType.SERVLET)
-                .sibling(CatalogueConfiguration.class).web(WebApplicationType.NONE)
+                .sibling(CatalogueConfiguration.class).web(WebApplicationType.SERVLET)
                 .run(args);
     }
 }

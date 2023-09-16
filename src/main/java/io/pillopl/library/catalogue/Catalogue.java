@@ -9,6 +9,10 @@ import lombok.AllArgsConstructor;
 import static io.pillopl.library.commons.commands.Result.Rejection;
 import static io.pillopl.library.commons.commands.Result.Success;
 
+
+import java.util.List;
+
+
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class Catalogue {
 
@@ -38,6 +42,9 @@ public class Catalogue {
         return bookInstance;
     }
 
+	List<Book> findAll () {
+		return database.findAll () ;
+	}
 
 }
 

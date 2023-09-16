@@ -2,7 +2,9 @@ package io.pillopl.library.catalogue;
 
 import lombok.NonNull;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Value
 class ISBN {
 
@@ -13,6 +15,7 @@ class ISBN {
 
     ISBN(String isbn) {
         if (!isbn.trim().matches(VERY_SIMPLE_ISBN_CHECK)) {
+			log.info("ISBN - ctor : {}", isbn);
             throw new IllegalArgumentException("Wrong ISBN!");
         }
         this.isbn = isbn.trim();
