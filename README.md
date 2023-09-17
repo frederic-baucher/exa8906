@@ -1,6 +1,84 @@
 [![CircleCI](https://circleci.com/gh/ddd-by-examples/library.svg?style=svg)](https://circleci.com/gh/ddd-by-examples/library)
 [![Code Coverage](https://codecov.io/gh/ddd-by-examples/library/branch/master/graph/badge.svg)](https://codecov.io/gh/ddd-by-examples/library)
 
+
+# Local Tests
+The bounded contexts (BC) are published in their respective port
+- lending BC:  http://localhost:8080/lending
+- catalogue BC: http://localhost:8081/catalogue
+
+# Visit the databases
+Each BC has its own persistance mechanism (here, they used two different instances of the same technology, say H2).
+```log
+2023-09-17 02:47:29.088  INFO 12068 --- [           main] o.s.j.d.e.EmbeddedDatabaseFactory        : Starting embedded database: url='jdbc:h2:mem:b04a503c-68e8-4d80-94fc-1e625596456a;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
+[..]
+2023-09-17 02:47:30.239  INFO 12068 --- [           main] o.s.j.d.e.EmbeddedDatabaseFactory        : Starting embedded database: url='jdbc:h2:mem:0b228f9a-a4fd-4364-b34e-1e67b26e8da2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
+```
+The first (jdbc:h2:mem:b04a503c-68e8-4d80-94fc-1e625596456a) is the db associated to lending BC.
+The second (jdbc:h2:mem:0b228f9a-a4fd-4364-b34e-1e67b26e8da2) is the db associated to catalogue BC.
+
+The url has to be posted in the JDBC URL requested when browsing http://localhost:8080/h2-console
+![](https://i.imgur.com/7r3szjq.png)
+
+# Tests catalogue BC
+
+## Add a book
+
+### curl (POST) with JSON payload inline
+
+#### Under bash
+> curl -i -X POST -H "Content-Type: application/json" -d '{"bookIsbn":{"isbn":"9780321831"},"title":{"title":"Vaughn Vernon"},"author":{"name":"Implementing DDD"}}'	http://localhost:8081/books
+
+#### Under Powershell
+triple the double-quote !!!
+> curl -i -X POST -H "Content-Type: application/json" -d "{"""bookIsbn""":{"""isbn""":"""9780321832"""},"""title""":{"""title""":"""Jules Vernes"""},"""author""":{"""name""":"""1000 lieues sous les mers"""}}"
+
+### curl wirth JSON payload in file
+
+
+
+## List all books
+
+### get (via web browser)
+> browser> http://localhost:8081/catalogue/books
+
+
+# Tests lending BC
+
+## Context
+The log did output this:
+```log
+2023-09-17 02:29:22.701  INFO 16848 --- [           main] i.p.l.lending.LendingDatabaseConfig      : Created bookId: 4e778271-a600-470c-9f65-6b4a1aec408b
+2023-09-17 02:29:22.701  INFO 16848 --- [           main] i.p.l.lending.LendingDatabaseConfig      : Created libraryBranchId: ddbd41a0-0f0d-4866-ad6f-bd5527ce597c
+2023-09-17 02:29:22.702  INFO 16848 --- [           main] i.p.l.lending.LendingDatabaseConfig      : Created patronId: e6745a70-00c5-46b0-9b14-b56042c39bbc
+```
+
+
+## View the holds and checkout of a patron (= profile)
+
+For profile: e6745a70-00c5-46b0-9b14-b56042c39bbc
+> browser > http://localhost:8080/lending/profiles/e6745a70-00c5-46b0-9b14-b56042c39bbc
+
+## Add a hold
+
+
+File placeholdrequest.json
+```json
+{
+    "bookId":"4e778271-a600-470c-9f65-6b4a1aec408b",
+    "libraryBranchId":"ddbd41a0-0f0d-4866-ad6f-bd5527ce597c",
+	"numberOfDays":30
+}
+```
+
+> curl -i -X POST -H "Content-Type: application/json" -d @placeholdrequest.json http://localhost:8080/profiles/e6745a70-00c5-46b0-9b14-b56042c39bbc/holds
+
+
+
+
+
+
+
 # Table of contents
 
 1. [About](#about)

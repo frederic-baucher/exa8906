@@ -52,12 +52,13 @@ class PatronProfileController {
     private final PlacingOnHold placingOnHold;
     private final CancelingHold cancelingHold;
 
-    @GetMapping("/profiles/{patronId}")
+	// to be able to have /h2-console on root, /lending can not be forced in lending.properties (cf exa8906/issues/10)
+    @GetMapping("/lending/profiles/{patronId}")
     ResponseEntity<ProfileResource> patronProfile(@PathVariable UUID patronId) {
         return ok(new ProfileResource(patronId));
     }
 
-    @GetMapping("/profiles/{patronId}/holds/")
+    @GetMapping("/lending/profiles/{patronId}/holds/")
     ResponseEntity<CollectionModel<EntityModel<Hold>>> findHolds(@PathVariable UUID patronId) {
         List<EntityModel<Hold>> holds = patronProfiles.fetchFor(new PatronId(patronId))
                 .getHoldsView()
@@ -69,7 +70,7 @@ class PatronProfileController {
 
     }
 
-    @GetMapping("/profiles/{patronId}/holds/{bookId}")
+    @GetMapping("/lending/profiles/{patronId}/holds/{bookId}")
     ResponseEntity<EntityModel<Hold>> findHold(@PathVariable UUID patronId, @PathVariable UUID bookId) {
         return patronProfiles.fetchFor(new PatronId(patronId))
                 .findHold(new BookId(bookId))
@@ -78,7 +79,7 @@ class PatronProfileController {
 
     }
 
-    @GetMapping("/profiles/{patronId}/checkouts/")
+    @GetMapping("/lending/profiles/{patronId}/checkouts/")
     ResponseEntity<CollectionModel<EntityModel<Checkout>>> findCheckouts(@PathVariable UUID patronId) {
         List<EntityModel<Checkout>> checkouts = patronProfiles.fetchFor(new PatronId(patronId))
                 .getCurrentCheckouts()
@@ -89,7 +90,7 @@ class PatronProfileController {
         return ResponseEntity.ok(new CollectionModel<>(checkouts, linkTo(methodOn(PatronProfileController.class).findHolds(patronId)).withSelfRel()));
     }
 
-    @GetMapping("/profiles/{patronId}/checkouts/{bookId}")
+    @GetMapping("/lending/profiles/{patronId}/checkouts/{bookId}")
     ResponseEntity<EntityModel<Checkout>> findCheckout(@PathVariable UUID patronId, @PathVariable UUID bookId) {
         return patronProfiles.fetchFor(new PatronId(patronId))
                 .findCheckout(new BookId(bookId))
@@ -97,7 +98,7 @@ class PatronProfileController {
                 .getOrElse(notFound().build());
     }
 
-    @PostMapping("/profiles/{patronId}/holds")
+    @PostMapping("/lending/profiles/{patronId}/holds")
     ResponseEntity placeHold(@PathVariable UUID patronId, @RequestBody PlaceHoldRequest request) {
         Try<Result> result = placingOnHold.placeOnHold(
                 new PlaceOnHoldCommand(
@@ -113,7 +114,7 @@ class PatronProfileController {
                 .getOrElse(ResponseEntity.status(INTERNAL_SERVER_ERROR).build());
     }
 
-    @DeleteMapping("/profiles/{patronId}/holds/{bookId}")
+    @DeleteMapping("/lending/profiles/{patronId}/holds/{bookId}")
     ResponseEntity cancelHold(@PathVariable UUID patronId, @PathVariable UUID bookId) {
         Try<Result> result = cancelingHold.cancelHold(new CancelHoldCommand(Instant.now(), new PatronId(patronId), new BookId(bookId)));
         return result

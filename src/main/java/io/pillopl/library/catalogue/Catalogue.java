@@ -27,6 +27,15 @@ public class Catalogue {
         });
     }
 
+    public Try<Result> addBook(Author author, Title title, ISBN isbn) {
+        return Try.of(() -> {
+            Book book = new Book(isbn, title, author);
+            database.saveNew(book);
+            return Success;
+        });
+    }
+
+
     public Try<Result> addBookInstance(String isbn, BookType bookType) {
         return Try.of(() -> database
                 .findBy(new ISBN(isbn))
