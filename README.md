@@ -77,9 +77,22 @@ File placeholdrequest.json
 > curl -i -X POST -H "Content-Type: application/json" -d @placeholdrequest.json http://localhost:8080/profiles/e6745a70-00c5-46b0-9b14-b56042c39bbc/holds
 
 
+# Generate the REST client 
 
+Open one console
+> mvn spring-boot:run
 
+Open another
+> mvn compile
+It produces the file openapi.json in target/library-0
 
+```json
+{"openapi":"3.0.1",
+ "info":
+	{"title":"OpenAPI definition","version":"v0"},
+	 "servers":[{"url":"http://localhost:8080//catalogue","description":"Generated server url"}],
+	 "paths":{"/books":
+```
 
 
 # Table of contents
