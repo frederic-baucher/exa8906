@@ -35,7 +35,10 @@ triple the double-quote !!!
 
 ### curl wirth JSON payload in file
 
+## Add book instance
 
+0321125215 is the ISBN of the book that have a new instance.
+> curl -i -X POST http://localhost:8081/catalogue/books/0321125215/instances
 
 ## List all books
 
