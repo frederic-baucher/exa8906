@@ -4,8 +4,9 @@
 
 # Local Tests
 The bounded contexts (BC) are published in their respective port
-- lending BC:  http://localhost:8080/lending
+- lending BC:  http://localhost:8082/lending
 - catalogue BC: http://localhost:8081/catalogue
+8080 is left for client.
 
 # Visit the databases
 Each BC has its own persistance mechanism (here, they used two different instances of the same technology, say H2).
@@ -17,7 +18,7 @@ Each BC has its own persistance mechanism (here, they used two different instanc
 The first (jdbc:h2:mem:b04a503c-68e8-4d80-94fc-1e625596456a) is the db associated to lending BC.
 The second (jdbc:h2:mem:0b228f9a-a4fd-4364-b34e-1e67b26e8da2) is the db associated to catalogue BC.
 
-The url has to be posted in the JDBC URL requested when browsing http://localhost:8080/h2-console
+The url has to be posted in the JDBC URL requested when browsing http://localhost:8081/h2-console
 ![](https://i.imgur.com/7r3szjq.png)
 
 # Tests catalogue BC
@@ -60,7 +61,7 @@ The log did output this:
 ## View the holds and checkout of a patron (= profile)
 
 For profile: e6745a70-00c5-46b0-9b14-b56042c39bbc
-> browser > http://localhost:8080/lending/profiles/e6745a70-00c5-46b0-9b14-b56042c39bbc
+> browser > http://localhost:8081/lending/profiles/e6745a70-00c5-46b0-9b14-b56042c39bbc
 
 ## Add a hold
 
@@ -77,22 +78,10 @@ File placeholdrequest.json
 > curl -i -X POST -H "Content-Type: application/json" -d @placeholdrequest.json http://localhost:8080/profiles/e6745a70-00c5-46b0-9b14-b56042c39bbc/holds
 
 
-# Generate the REST client 
 
-Open one console
-> mvn spring-boot:run
+# Client
+cf https://github.com/frederic-baucher/exa8906client
 
-Open another
-> mvn compile
-It produces the file openapi.json in target/library-0
-
-```json
-{"openapi":"3.0.1",
- "info":
-	{"title":"OpenAPI definition","version":"v0"},
-	 "servers":[{"url":"http://localhost:8080//catalogue","description":"Generated server url"}],
-	 "paths":{"/books":
-```
 
 
 # Table of contents
